@@ -1,122 +1,280 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:hacksync_26/signin.dart';
 
-void main() {
-  runApp(const MyApp());
+// Ensure you have generated this file using 'flutterfire configure'
+import 'firebase_options.dart'; 
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  
+  // High-priority: Initialize Firebase before the app starts
+  try {
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+  } catch (e) {
+    debugPrint("Firebase init failed: $e");
+  }
+  
+  runApp(const ConnectSphereApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class ConnectSphereApp extends StatelessWidget {
+  const ConnectSphereApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'ConnectSphere',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // TRY THIS: Try running your application with "flutter run". You'll see
-        // the application has a purple toolbar. Then, without quitting the app,
-        // try changing the seedColor in the colorScheme below to Colors.green
-        // and then invoke "hot reload" (save your changes or press the "hot
-        // reload" button in a Flutter-supported IDE, or press "r" if you used
-        // the command line to start the app).
-        //
-        // Notice that the counter didn't reset back to zero; the application
-        // state is not lost during the reload. To reset the state, use hot
-        // restart instead.
-        //
-        // This works for code too, not just values: Most code changes can be
-        // tested with just a hot reload.
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF2563EB)),
+        useMaterial3: true,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const AuthWrapper(),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
-  final String title;
+// ─────────────────────────────────────────────────────────────────────────────
+// AUTH WRAPPER: Directs user based on login state
+// ─────────────────────────────────────────────────────────────────────────────
+class AuthWrapper extends StatelessWidget {
+  const AuthWrapper({super.key});
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  Widget build(BuildContext context) {
+    return StreamBuilder<User?>(
+      stream: FirebaseAuth.instance.authStateChanges(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Scaffold(body: Center(child: CircularProgressIndicator()));
+        }
+        
+        // FIX: If logged in, go to Skills. If not, go to Login.
+        if (snapshot.hasData) {
+          return const SkillsWorkflow();
+        } else {
+          return const LoginPage(); // Replace with your actual LoginPage()
+        }
+      },
+    );
+  }
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+// ─────────────────────────────────────────────────────────────────────────────
+// SKILLS WORKFLOW: The 2-Screen Process
+// ─────────────────────────────────────────────────────────────────────────────
+class SkillsWorkflow extends StatefulWidget {
+  const SkillsWorkflow({super.key});
 
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
+  @override
+  State<SkillsWorkflow> createState() => _SkillsWorkflowState();
+}
+
+class _SkillsWorkflowState extends State<SkillsWorkflow> {
+  final PageController _pageController = PageController();
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
+  final Set<String> _selectedIndustrySkills = {};
+  final Set<String> _selectedTopSkills = {};
+
+  final List<String> _industrySkills = [
+    'Product Designer', 'Social Media Management', 'Web Development',
+    'Mobile App Developer', 'Graphic Designer', 'Digital Marketing',
+  ];
+
+  final List<String> _topSkills = [
+    'Flutter', 'React Js', 'HTML', 'CSS', 'JavaScript', 'UI/UX',
+    'Figma', 'Tailwind', 'Next.js', 'Node.js', 'MongoDB', 'SQL',
+  ];
+
+  String _industrySearch = '';
+  String _topSearch = '';
+  bool _isSaving = false;
+
+  Future<void> _saveSkillsToFirestore() async {
+    final user = _auth.currentUser;
+    if (user == null) return;
+
+    setState(() => _isSaving = true);
+
+    try {
+      // Saves to users/{uid}/skills/profile_skills
+      await _firestore
+          .collection('users')
+          .doc(user.uid)
+          .collection('skills')
+          .doc('profile_skills')
+          .set({
+        'industry_skills': _selectedIndustrySkills.toList(),
+        'top_skills': _selectedTopSkills.toList(),
+        'last_updated': FieldValue.serverTimestamp(),
+      }, SetOptions(merge: true));
+
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Profile Updated!"), backgroundColor: Colors.green),
+        );
+      }
+    } catch (e) {
+      // If emulator connection fails, it will be caught here
+      debugPrint("Firestore Error: $e");
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Connection Error: $e"), backgroundColor: Colors.redAccent),
+        );
+      }
+    } finally {
+      if (mounted) setState(() => _isSaving = false);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
     return Scaffold(
-      appBar: AppBar(
-        // TRY THIS: Try changing the color here to a specific color (to
-        // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
-        // change color while the other colors stay the same.
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
+      backgroundColor: Colors.white,
+      body: PageView(
+        controller: _pageController,
+        physics: const NeverScrollableScrollPhysics(),
+        children: [
+          _buildScreen(
+            title: 'Your Industries',
+            subtitle: 'Select fields you work in',
+            icon: Icons.business_center_outlined,
+            searchValue: _industrySearch,
+            onSearch: (v) => setState(() => _industrySearch = v),
+            masterList: _industrySkills,
+            selectedSet: _selectedIndustrySkills,
+            isTopSkill: false,
+            btnLabel: 'Continue',
+            onBtnPressed: _selectedIndustrySkills.isNotEmpty 
+                ? () => _pageController.nextPage(duration: const Duration(milliseconds: 300), curve: Curves.ease)
+                : null,
+          ),
+          _buildScreen(
+            title: 'Top 5 Skills',
+            subtitle: 'Pick exactly 5 strengths (${_selectedTopSkills.length}/5)',
+            icon: Icons.star_border_rounded,
+            searchValue: _topSearch,
+            onSearch: (v) => setState(() => _topSearch = v),
+            masterList: _topSkills,
+            selectedSet: _selectedTopSkills,
+            isTopSkill: true,
+            showBack: true,
+            btnLabel: _isSaving ? 'Saving...' : 'Complete Profile',
+            onBtnPressed: (_selectedTopSkills.length == 5 && !_isSaving) ? _saveSkillsToFirestore : null,
+          ),
+        ],
       ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
+    );
+  }
+
+  Widget _buildScreen({
+    required String title,
+    required String subtitle,
+    required IconData icon,
+    required String searchValue,
+    required ValueChanged<String> onSearch,
+    required List<String> masterList,
+    required Set<String> selectedSet,
+    required bool isTopSkill,
+    required String btnLabel,
+    required VoidCallback? onBtnPressed,
+    bool showBack = false,
+  }) {
+    final filtered = masterList.where((s) => s.toLowerCase().contains(searchValue.toLowerCase())).toList();
+    final bool canAdd = searchValue.trim().isNotEmpty && 
+                        !masterList.any((s) => s.toLowerCase() == searchValue.toLowerCase().trim()) &&
+                        !selectedSet.contains(searchValue.trim());
+
+    return SafeArea(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
         child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          //
-          // TRY THIS: Invoke "debug painting" (choose the "Toggle Debug Paint"
-          // action in the IDE, or press "p" in the console), to see the
-          // wireframe for each widget.
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text('You have pushed the button this many times:'),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            if (showBack) IconButton(icon: const Icon(Icons.arrow_back), onPressed: () => _pageController.previousPage(duration: const Duration(milliseconds: 300), curve: Curves.ease)),
+            const SizedBox(height: 10),
+            Icon(icon, size: 40, color: Colors.blueAccent),
+            const SizedBox(height: 10),
+            Text(title, style: const TextStyle(fontSize: 28, fontWeight: FontWeight.bold)),
+            Text(subtitle, style: const TextStyle(color: Colors.grey)),
+            const SizedBox(height: 20),
+            TextField(
+              onChanged: onSearch,
+              decoration: InputDecoration(
+                hintText: 'Search or add...',
+                prefixIcon: const Icon(Icons.search),
+                filled: true,
+                fillColor: Colors.grey.shade100,
+                border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
+              ),
+            ),
+            const SizedBox(height: 15),
+            if (canAdd)
+              ActionChip(
+                label: Text('Add "$searchValue"'),
+                avatar: const Icon(Icons.add),
+                onPressed: () {
+                  setState(() {
+                    if (isTopSkill) {
+                      if (selectedSet.length < 5) selectedSet.add(searchValue.trim());
+                    } else {
+                      selectedSet.add(searchValue.trim());
+                    }
+                  });
+                },
+              ),
+            Expanded(
+              child: SingleChildScrollView(
+                child: Wrap(
+                  spacing: 8,
+                  runSpacing: 8,
+                  children: [
+                    ...selectedSet.map((s) => _buildChip(s, selectedSet, isTopSkill, true)),
+                    ...filtered.where((s) => !selectedSet.contains(s)).map((s) => _buildChip(s, selectedSet, isTopSkill, false)),
+                  ],
+                ),
+              ),
+            ),
+            SizedBox(
+              width: double.infinity,
+              height: 55,
+              child: ElevatedButton(
+                onPressed: onBtnPressed,
+                style: ElevatedButton.styleFrom(backgroundColor: Colors.blueAccent, foregroundColor: Colors.white),
+                child: Text(btnLabel),
+              ),
             ),
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+    );
+  }
+
+  Widget _buildChip(String label, Set<String> selectedSet, bool isTopSkill, bool isSelected) {
+    return FilterChip(
+      label: Text(label),
+      selected: isSelected,
+      onSelected: (val) {
+        setState(() {
+          if (val) {
+            if (isTopSkill) {
+              if (selectedSet.length < 5) selectedSet.add(label);
+            } else {
+              selectedSet.add(label);
+            }
+          } else {
+            selectedSet.remove(label);
+          }
+        });
+      },
     );
   }
 }
+
