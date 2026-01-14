@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1026638240396",
+    "project_id": "hacksync-26",
+    "storage_bucket": "hacksync-26.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1026638240396:android:07e97018cb1e9fa50639a9",
+        "android_client_info": {
+          "package_name": "com.example.hacksync_26"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDvtZdGHUZzpd2jK3uFx203PUtRaHBgOOU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
