@@ -20,7 +20,7 @@ class _MainNavigationState extends State<MainNavigation> {
   // List of tab contents (no Scaffold inside them)
   final List<Widget> _tabContents = [
     const HomeScreen(),          // index 0     // index 1
-    const JobSearch(),           // index 2
+               // index 2
        // index 3
   ];
 
