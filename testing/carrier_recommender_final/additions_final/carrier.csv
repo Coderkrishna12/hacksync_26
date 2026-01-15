@@ -1,0 +1,41 @@
+career,skills,growth,min_education,interests,trend_score,industry
+Data Scientist,"Python*,SQL*,Machine Learning*,Statistics,Pandas,Numpy",High,Bachelor,"Analytical,Technical",9,Artificial Intelligence
+Data Analyst,"Python*,SQL*,Excel,Power BI,Tableau,Statistics",High,Bachelor,"Analytical",8,Data Analytics
+Machine Learning Engineer,"Python*,Machine Learning*,Deep Learning*,TensorFlow,PyTorch",High,Bachelor,"Technical",9,Artificial Intelligence
+AI Engineer,"Python*,Artificial Intelligence*,Machine Learning,NLP,Computer Vision",High,Bachelor,"Technical",10,Artificial Intelligence
+Business Analyst,"Excel*,SQL*,Business Analysis,Requirements Gathering",Medium,Bachelor,"Analytical,Management",7,Business Analytics
+Web Developer,"HTML*,CSS*,JavaScript*,React,NodeJS",High,Diploma,"Technical",8,Web Development
+Frontend Developer,"HTML*,CSS*,JavaScript*,React,Angular",High,Diploma,"Creative,Technical",8,Web Development
+Backend Developer,"Python*,Java*,APIs,Databases,Docker",High,Bachelor,"Technical",9,Software Engineering
+Full Stack Developer,"HTML*,CSS*,JavaScript*,React,NodeJS,MongoDB",High,Bachelor,"Technical",9,Software Engineering
+Mobile App Developer,"Dart*,Flutter*,Firebase,REST APIs",High,Diploma,"Technical",9,Mobile Development
+Android Developer,"Java*,Kotlin*,Android SDK,Firebase",Medium,Diploma,"Technical",8,Mobile Development
+iOS Developer,"Swift*,iOS,UIKit,Xcode",Medium,Diploma,"Technical",8,Mobile Development
+DevOps Engineer,"Linux*,Docker*,Kubernetes*,CI/CD,AWS",High,Bachelor,"Technical",10,Cloud & DevOps
+Cloud Engineer,"AWS*,Azure*,Cloud Architecture,Networking",High,Bachelor,"Technical",9,Cloud Computing
+Cybersecurity Analyst,"Networking*,Linux*,Security*,Threat Analysis,SIEM",Medium,Bachelor,"Technical",8,Cybersecurity
+Ethical Hacker,"Penetration Testing*,Linux,Networking,Cybersecurity",Medium,Bachelor,"Technical",8,Cybersecurity
+Network Engineer,"Networking*,TCP/IP,Routing,Switching,Firewalls",Medium,Diploma,"Technical",7,Networking
+Database Administrator,"SQL*,PostgreSQL,MySQL,Database Optimization",Medium,Bachelor,"Analytical",7,Databases
+Software Engineer,"Python,Java,C++,Data Structures,Algorithms",High,Bachelor,"Technical",9,Software Engineering
+UI UX Designer,"UI Design,UX Research,Figma*,Prototyping",High,Diploma,"Creative",9,Design
+Product Manager,"Product Strategy,Roadmaps,Agile,Scrum",High,Bachelor,"Management",9,Product Management
+Project Manager,"Project Planning,Risk Management,Agile,Scrum",Medium,Bachelor,"Management",8,Project Management
+QA Engineer,"Manual Testing,Automation,Selenium,Test Cases",Medium,Diploma,"Analytical",7,Software Testing
+Automation Engineer,"Python*,Selenium*,Automation Frameworks",Medium,Bachelor,"Technical",8,Automation
+Blockchain Developer,"Blockchain*,Smart Contracts,Solidity,Ethereum",Medium,Bachelor,"Technical",8,Blockchain
+AR VR Developer,"Unity*,C#,Augmented Reality,Virtual Reality",Medium,Bachelor,"Creative,Technical",8,AR/VR
+Embedded Systems Engineer,"C*,Microcontrollers,Embedded Linux,RTOS",Medium,Bachelor,"Technical",7,Embedded Systems
+Robotics Engineer,"Robotics*,Python,C++,ROS,Sensors",Medium,Bachelor,"Technical",8,Robotics
+IoT Engineer,"IoT*,Embedded Systems,Sensors,MQTT,Cloud",Medium,Bachelor,"Technical",8,IoT
+Digital Marketing Specialist,"SEO*,Content Marketing,Google Analytics",High,Diploma,"Creative",9,Digital Marketing
+Data Engineer,"Python*,SQL*,ETL,Spark,Hadoop",High,Bachelor,"Technical",10,Big Data
+Big Data Engineer,"Hadoop*,Spark*,Kafka,Distributed Systems",High,Bachelor,"Technical",10,Big Data
+NLP Engineer,"Python*,NLP*,Transformers,Text Processing",High,Bachelor,"Technical",9,Artificial Intelligence
+Computer Vision Engineer,"Python*,Computer Vision,OpenCV,Deep Learning",High,Bachelor,"Technical",9,Artificial Intelligence
+Research Scientist,"Research*,Statistics,Machine Learning,Publications",Medium,Master,"Analytical",7,Research
+Teaching Assistant,"Teaching*,Communication,Subject Knowledge",Medium,Bachelor,"Management",6,Education
+Technical Writer,"Documentation*,Technical Writing,APIs,Tools",Medium,Diploma,"Creative",7,Documentation
+Systems Analyst,"System Analysis,Requirements,Documentation",Medium,Bachelor,"Analytical",7,IT Systems
+IT Support Engineer,"IT Support,Troubleshooting,Networking,Hardware",Medium,Diploma,"Technical",6,IT Services
+IT Call Center,"IT Support,Troubleshooting,Networking",Low,High School,"Management",4,IT

@@ -62,7 +62,8 @@ import 'home_screen.dart';
 import 'bundles_screen.dart';
 import 'job_search.dart';
 import 'profile_screen.dart';
-import 'skills.dart'; // ← Your career/skills recommendation page
+import 'skills.dart';
+import 'video_conference.dart'; // ← add correct import for MeetingSchedulerScreen
 
 class MainNavigation extends StatefulWidget {
   const MainNavigation({super.key});
@@ -79,15 +80,15 @@ class _MainNavigationState extends State<MainNavigation> {
     "Bundles",
     "Jobs",
     "Profile",
-    "Career", // ← New tab
+    "Career",
   ];
 
   final List<Widget> _tabContents = [
-    const HomeScreen(), // 0
-    const HomeScreen(), // 1
+    const BytesFeedContent(), // 0 – assuming this one is const / stateless & ok
+    const QuickMeetingScreen(),
     const JobsSection(), // 2
     const ProfileScreen(), // 3
-    const SkillsWorkflow(), // 4 ← Career recommendation flow
+    const SkillsWorkflow(), // 4
   ];
 
   @override
@@ -125,10 +126,7 @@ class _MainNavigationState extends State<MainNavigation> {
             icon: Icon(Icons.person_rounded),
             label: "Profile",
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.lightbulb),
-            label: "Career",
-          ), // ← New
+          BottomNavigationBarItem(icon: Icon(Icons.lightbulb), label: "Career"),
         ],
       ),
     );

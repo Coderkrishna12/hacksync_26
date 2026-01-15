@@ -1,0 +1,41 @@
+career,skills,growth
+Data Scientist,"Python*,SQL*,Machine Learning*,Statistics,Pandas,Numpy",High
+Data Analyst,"Python*,SQL*,Excel,Power BI,Tableau,Statistics",High
+Machine Learning Engineer,"Python*,Machine Learning*,Deep Learning*,TensorFlow,PyTorch",High
+AI Engineer,"Python*,Artificial Intelligence*,Machine Learning,NLP,Computer Vision",High
+Business Analyst,"Excel*,SQL*,Business Analysis,Requirements Gathering",Medium
+Web Developer,"HTML*,CSS*,JavaScript*,React,NodeJS",High
+Frontend Developer,"HTML*,CSS*,JavaScript*,React,Angular",High
+Backend Developer,"Python*,Java*,APIs,Databases,Docker",High
+Full Stack Developer,"HTML*,CSS*,JavaScript*,React,NodeJS,MongoDB",High
+Mobile App Developer,"Dart*,Flutter*,Firebase,REST APIs",High
+Android Developer,"Java*,Kotlin*,Android SDK,Firebase",Medium
+iOS Developer,"Swift*,iOS,UIKit,Xcode",Medium
+DevOps Engineer,"Linux*,Docker*,Kubernetes*,CI/CD,AWS",High
+Cloud Engineer,"AWS*,Azure*,Cloud Architecture,Networking",High
+Cybersecurity Analyst,"Networking*,Linux*,Security*,Threat Analysis,SIEM",Medium
+Ethical Hacker,"Penetration Testing*,Linux,Networking,Cybersecurity",Medium
+Network Engineer,"Networking*,TCP/IP,Routing,Switching,Firewalls",Medium
+Database Administrator,"SQL*,PostgreSQL,MySQL,Database Optimization",Medium
+Software Engineer,"Python,Java,C++,Data Structures,Algorithms",High
+Game Developer,"C++*,Unity*,Game Physics,Graphics Programming",Medium
+UI UX Designer,"UI Design,UX Research,Figma*,Prototyping",High
+Product Manager,"Product Strategy,Roadmaps,Agile,Scrum",High
+Project Manager,"Project Planning,Risk Management,Agile,Scrum",Medium
+QA Engineer,"Manual Testing,Automation,Selenium,Test Cases",Medium
+Automation Engineer,"Python*,Selenium*,Automation Frameworks",Medium
+Blockchain Developer,"Blockchain*,Smart Contracts,Solidity,Ethereum",Medium
+AR VR Developer,"Unity*,C#,Augmented Reality,Virtual Reality",Medium
+Embedded Systems Engineer,"C*,Microcontrollers,Embedded Linux,RTOS",Medium
+Robotics Engineer,"Robotics*,Python,C++,ROS,Sensors",Medium
+IoT Engineer,"IoT*,Embedded Systems,Sensors,MQTT,Cloud",Medium
+Digital Marketing Specialist,"SEO*,Content Marketing,Google Analytics",High
+Data Engineer,"Python*,SQL*,ETL,Spark,Hadoop",High
+Big Data Engineer,"Hadoop*,Spark*,Kafka,Distributed Systems",High
+NLP Engineer,"Python*,NLP*,Transformers,Text Processing",High
+Computer Vision Engineer,"Python*,Computer Vision,OpenCV,Deep Learning",High
+Research Scientist,"Research*,Statistics,Machine Learning,Publications",Medium
+Teaching Assistant,"Teaching*,Communication,Subject Knowledge",Medium
+Technical Writer,"Documentation*,Technical Writing,APIs,Tools",Medium
+Systems Analyst,"System Analysis,Requirements,Documentation",Medium
+IT Support Engineer,"IT Support,Troubleshooting,Networking,Hardware",Medium

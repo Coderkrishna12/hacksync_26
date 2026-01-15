@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>AI Mock Interview</title>
+</head>
+<body>
+  <h2>AI Mock Interview</h2>
+
+  <button onclick="startInterview()">Start Interview</button>
+  <p id="question"></p>
+
+  <textarea id="answer" rows="4" cols="60"></textarea><br>
+  <button onclick="submitAnswer()">Submit Answer</button>
+
+  <pre id="feedback"></pre>
+
+<script>
+let sessionId = "";
+
+async function startInterview() {
+  const res = await fetch("http://127.0.0.1:8000/start_interview", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      resume: { skills: ["Python", "SQL"] },
+      role: "Data Analyst",
+      difficulty: "Easy"
+    })
+  });
+
+  const data = await res.json();
+  sessionId = data.session_id;
+  document.getElementById("question").innerText = data.question;
+}
+
+async function submitAnswer() {
+  const answer = document.getElementById("answer").value;
+
+  const res = await fetch("http://127.0.0.1:8000/submit_answer", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      session_id: sessionId,
+      answer: answer
+    })
+  });
+
+  const data = await res.json();
+  document.getElementById("feedback").innerText = data.feedback;
+}
+</script>
+</body>
+</html>

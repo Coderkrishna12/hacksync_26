@@ -1,0 +1,12 @@
+career,skills,growth,min_education,interests,trend_score,industry,career_path,next_steps
+Data Scientist,"Python*,SQL*,Machine Learning*,Statistics,Pandas,Numpy",High,Bachelor,"analytical,technical",9,Artificial Intelligence,"Data Analyst → Data Scientist → Senior Data Scientist","Learn advanced ML, build end-to-end projects, publish Kaggle notebooks"
+Data Analyst,"Python*,SQL*,Excel,Power BI,Tableau,Statistics",High,Bachelor,"analytical",8,Data Analytics,"Junior Analyst → Data Analyst → Senior Analyst","Master SQL queries, build dashboards, learn statistics"
+Machine Learning Engineer,"Python*,Machine Learning*,Deep Learning*,TensorFlow,PyTorch",High,Bachelor,"technical",9,Artificial Intelligence,"ML Engineer → Senior ML Engineer → AI Architect","Learn model deployment, optimize ML pipelines, study MLOps"
+AI Engineer,"Python*,Artificial Intelligence*,Machine Learning,NLP,Computer Vision",High,Bachelor,"technical",10,Artificial Intelligence,"AI Engineer → Senior AI Engineer → AI Lead","Specialize in NLP/CV, deploy AI models, study transformers"
+Business Analyst,"Excel*,SQL*,Business Analysis,Requirements Gathering",Medium,Bachelor,"analytical,management",7,Business Analytics,"Business Analyst → Senior BA → Product Manager","Improve documentation skills, learn stakeholder management"
+Web Developer,"HTML*,CSS*,JavaScript*,React,NodeJS",High,Diploma,"technical",8,Web Development,"Web Developer → Senior Developer → Tech Lead","Build responsive apps, learn backend basics"
+IT Support Engineer,"IT Support,Troubleshooting,Networking,Hardware",Medium,Diploma,"technical",6,IT Services,"IT Support → System Admin → IT Manager","Strengthen networking basics, learn Linux administration"
+IT Call Center,"IT Support,Troubleshooting,Networking",Low,High School,"management",4,IT,"Call Agent → Senior Support → IT Support Engineer","Improve communication, basic networking certification"
+Data Engineer,"Python*,SQL*,ETL,Spark,Hadoop",High,Bachelor,"technical",10,Big Data,"Data Engineer → Senior Data Engineer → Data Architect","Learn Spark deeply, build ETL pipelines, cloud data tools"
+Cloud Engineer,"AWS*,Azure*,Cloud Architecture,Networking",High,Bachelor,"technical",9,Cloud Computing,"Cloud Engineer → Senior Cloud Engineer → Cloud Architect","Get AWS/Azure certs, practice cloud deployments"
+Cybersecurity Analyst,"Networking*,Linux*,Security*,Threat Analysis,SIEM",Medium,Bachelor,"technical",8,Cybersecurity,"Security Analyst → Senior Analyst → Security Architect","Learn SIEM tools, threat modeling, security certifications"
