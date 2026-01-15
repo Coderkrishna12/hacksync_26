@@ -58,7 +58,7 @@
 
 import 'package:flutter/material.dart';
 
-import 'home_screen.dart' hide ProfileScreen;
+import 'home_screen.dart';
 import 'bundles_screen.dart';
 import 'job_search.dart';
 import 'profile_screen.dart';
@@ -84,8 +84,8 @@ class _MainNavigationState extends State<MainNavigation> {
 
   final List<Widget> _tabContents = [
     const HomeScreen(), // 0
-    const BundlesScreen(), // 1
-    const JobSearch(), // 2
+    const HomeScreen(), // 1
+    const JobsSection(), // 2
     const ProfileScreen(), // 3
     const SkillsWorkflow(), // 4 ← Career recommendation flow
   ];
