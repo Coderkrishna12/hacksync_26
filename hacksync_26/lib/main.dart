@@ -277,4 +277,3 @@ class _SkillsWorkflowState extends State<SkillsWorkflow> {
     );
   }
 }
-
