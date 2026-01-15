@@ -6,6 +6,8 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
+import 'signin.dart'; // ← Import your SignIn screen here
+
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
 
@@ -41,7 +43,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Future<void> _loadProfileData() async {
     final user = _auth.currentUser;
     if (user == null) {
-      // Handle not logged in (though unlikely here)
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("Please sign in to view profile")),
       );
@@ -49,7 +50,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
 
     try {
-      // Fetch skills from existing path
+      // Fetch skills
       final skillsDoc = await _firestore
           .collection('users')
           .doc(user.uid)
@@ -62,7 +63,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         _topSkills = List<String>.from(skillsDoc['top_skills'] ?? []);
       }
 
-      // Fetch profile data (new path: users/{uid}/profile)
+      // Fetch profile data
       final profileDoc = await _firestore
           .collection('users')
           .doc(user.uid)
@@ -78,9 +79,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
         _profilePicUrl = profileDoc['profile_pic_url'] ?? '';
       }
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Error loading profile: $e")),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text("Error loading profile: $e")));
     } finally {
       setState(() => _isLoading = false);
     }
@@ -96,12 +97,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
     setState(() => _isSaving = true);
 
     try {
-      // Upload to Storage
       final ref = _storage.ref('user_profiles/${user.uid}/profile_pic.jpg');
       await ref.putFile(File(image.path));
       final url = await ref.getDownloadURL();
 
-      // Save URL to Firestore
       await _firestore
           .collection('users')
           .doc(user.uid)
@@ -110,13 +109,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
           .set({'profile_pic_url': url}, SetOptions(merge: true));
 
       setState(() => _profilePicUrl = url);
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Profile picture updated!")),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text("Profile picture updated!")));
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Error uploading picture: $e")),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text("Error uploading picture: $e")));
     } finally {
       setState(() => _isSaving = false);
     }
@@ -135,31 +134,44 @@ class _ProfileScreenState extends State<ProfileScreen> {
           .collection('profile')
           .doc('details')
           .set({
-        'bio': _bioController.text,
-        'about': _aboutController.text,
-        'work_experience': _workExpController.text,
-        'education': _educationController.text,
-      }, SetOptions(merge: true));
+            'bio': _bioController.text,
+            'about': _aboutController.text,
+            'work_experience': _workExpController.text,
+            'education': _educationController.text,
+          }, SetOptions(merge: true));
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Profile details saved!")),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text("Profile details saved!")));
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Error saving details: $e")),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text("Error saving details: $e")));
     } finally {
       setState(() => _isSaving = false);
+    }
+  }
+
+  Future<void> _logout() async {
+    try {
+      await _auth.signOut();
+      // Navigate to SignIn screen and remove all previous routes
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => const LoginPage()),
+        (route) => false,
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text("Error signing out: $e")));
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Profile"),
-        centerTitle: true,
-      ),
+      appBar: AppBar(title: const Text("Profile"), centerTitle: true),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
           : SingleChildScrollView(
@@ -225,7 +237,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                   const SizedBox(height: 24),
 
-                  // Selected Industry Skills
+                  // Industry Skills
                   const Text(
                     "Industry Skills",
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
@@ -234,7 +246,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   Wrap(
                     spacing: 8,
                     runSpacing: 8,
-                    children: _industrySkills.map((skill) => Chip(label: Text(skill))).toList(),
+                    children: _industrySkills
+                        .map((skill) => Chip(label: Text(skill)))
+                        .toList(),
                   ),
                   const SizedBox(height: 24),
 
@@ -247,7 +261,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   Wrap(
                     spacing: 8,
                     runSpacing: 8,
-                    children: _topSkills.map((skill) => Chip(label: Text(skill))).toList(),
+                    children: _topSkills
+                        .map((skill) => Chip(label: Text(skill)))
+                        .toList(),
                   ),
                   const SizedBox(height: 24),
 
@@ -294,7 +310,33 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
                       child: _isSaving
                           ? const CircularProgressIndicator(color: Colors.white)
-                          : const Text("Save Profile", style: TextStyle(fontSize: 16)),
+                          : const Text(
+                              "Save Profile",
+                              style: TextStyle(fontSize: 16),
+                            ),
+                    ),
+                  ),
+
+                  const SizedBox(height: 24),
+
+                  // Logout Button
+                  SizedBox(
+                    width: double.infinity,
+                    child: OutlinedButton.icon(
+                      onPressed: _logout,
+                      icon: const Icon(Icons.logout, color: Colors.red),
+                      label: const Text(
+                        "Logout",
+                        style: TextStyle(
+                          color: Colors.red,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      style: OutlinedButton.styleFrom(
+                        side: const BorderSide(color: Colors.red, width: 2),
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                      ),
                     ),
                   ),
                 ],

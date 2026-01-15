@@ -7,12 +7,12 @@ plugins {
 
 android {
     namespace = "com.example.hacksync_26"
-    compileSdk = 34  // or 35/36 if your Flutter version expects it
+    compileSdk = 36  // or 35/36 if your Flutter version expects it
 
     defaultConfig {
         applicationId = "com.example.hacksync_26"
         minSdk = flutter.minSdkVersion  // fixed: changed from minSdkVersion() function to minSdk property
-        targetSdk = 34
+        targetSdk = 36
         versionCode = 1
         versionName = "1.0"
     }
