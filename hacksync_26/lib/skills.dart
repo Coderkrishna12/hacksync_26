@@ -67,86 +67,64 @@ class _SkillsWorkflowState extends State<SkillsWorkflow> {
   // ────────────────────────────────────────────────
   // ──  Firestore Save + Redirect to HomeScreen   ──
   // ────────────────────────────────────────────────
-  Future<void> _saveSkillsToFirestore() async {
-  print("→ saveSkills started");
+Future<void> _saveSkillsToFirestore() async {
+final user = _auth.currentUser;
+if (user == null) {
+  _showMsg("Not signed in", Colors.orange);
+  return;
+}
 
-  final user = _auth.currentUser;
-  if (user == null) {
-    print("→ no authenticated user");
-    _showMsg("Not signed in", Colors.orange);
-    return;
-  }
+if (!mounted) return;
 
-  print("→ uid = ${user.uid}");
+setState(() => _isSaving = true);
 
-  if (!mounted) {
-    print("→ widget already unmounted at start");
-    return;
-  }
+try {
+  await _firestore
+      .collection('users')
+      .doc(user.uid)
+      .collection('skills')
+      .doc('profile_skills')
+      .set({
+    'industry_skills': _selectedIndustrySkills.toList(),
+    'top_skills': _selectedTopSkills.toList(),
+    'last_updated': FieldValue.serverTimestamp(),
+  }, SetOptions(merge: true));
 
-  setState(() => _isSaving = true);
-  print("→ _isSaving = true");
+  if (!mounted) return;
 
-  try {
-    print("→ attempting Firestore write...");
+  // Show success message
+  _showMsg("Profile saved!", Colors.green);
 
-    await _firestore
-        .collection('users')
-        .doc(user.uid)
-        .collection('skills')
-        .doc('profile_skills')
-        .set({
-      'industry_skills': _selectedIndustrySkills.toList(),
-      'top_skills': _selectedTopSkills.toList(),
-      'last_updated': FieldValue.serverTimestamp(),
-    }, SetOptions(merge: true));
+  // IMPORTANT: Use a shorter delay or remove it completely
+  // Many developers remove delay entirely in 2025+ apps
+  await Future.delayed(const Duration(milliseconds: 800));
 
-    print("→ Firestore write SUCCESS");
+  if (!mounted) return;
 
-    if (!mounted) {
-      print("→ unmounted AFTER firestore write → cannot show snackbar or navigate");
-      return;
-    }
+  // Safest navigation patterns (choose ONE):
 
-    _showMsg("Profile saved!", Colors.green);
-    print("→ showed success snackbar");
 
-    // Small delay → user can actually see the message
-    await Future.delayed(const Duration(milliseconds: 1200));
-    print("→ delay finished");
-
-    if (!mounted) {
-      print("→ unmounted AFTER delay → skipping navigation");
-      return;
-    }
-
-    print("→ calling Navigator.pushReplacement NOW");
-    Navigator.pushReplacement(
+   Navigator.pushReplacement(
       context,
       MaterialPageRoute(builder: (_) => const HomeScreen()),
-    );
-    print("→ pushReplacement line executed");
+      );
 
-  } on FirebaseException catch (e) {
-    print("→ FIREBASE EXCEPTION: ${e.code} - ${e.message}");
-    if (mounted) _showMsg("Firebase error: ${e.message}", Colors.red);
-  } catch (e, stack) {
-    print("→ GENERAL EXCEPTION: $e");
-    print("→ stack: $stack");
-    if (mounted) _showMsg("Save failed: $e", Colors.red);
-  } finally {
-    print("→ entering finally block");
-    if (mounted) {
-      setState(() => _isSaving = false);
-      print("→ _isSaving = false");
-    } else {
-      print("→ not resetting _isSaving (widget unmounted)");
-    }
+  // Option C - Pop until root + push new (very clean for onboarding)
+  // Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
+
+} catch (e) {
+  if (mounted) {
+    _showMsg("Failed to save profile: ${e.toString()}", Colors.red);
+  }
+} finally {
+  if (mounted) {
+    setState(() => _isSaving = false);
   }
 }
-  // ────────────────────────────────────────────────
-  // ──  UI Layout Logic                           ──
-  // ────────────────────────────────────────────────
+}
+
+// ──  UI Layout Logic                           ──
+// ────────────────────────────────────────────────
 
   @override
   Widget build(BuildContext context) {

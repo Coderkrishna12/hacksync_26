@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'home_screen.dart' hide ProfileScreen;  // Keep hide if needed, but now HomeScreen is body-only
 import 'bundles_screen.dart';
 import 'job_search.dart';
-import 'profile_screen.dart';
 
 class MainNavigation extends StatefulWidget {
   const MainNavigation({super.key});
@@ -20,10 +19,9 @@ class _MainNavigationState extends State<MainNavigation> {
 
   // List of tab contents (no Scaffold inside them)
   final List<Widget> _tabContents = [
-    const HomeScreen(),          // index 0
-    const BundlesScreen(),       // index 1
+    const HomeScreen(),          // index 0     // index 1
     const JobSearch(),           // index 2
-    const ProfileScreen(),       // index 3
+       // index 3
   ];
 
   @override
