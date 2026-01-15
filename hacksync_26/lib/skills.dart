@@ -200,7 +200,7 @@ class _SkillsWorkflowState extends State<SkillsWorkflow> {
     if (user == null) return;
 
     if (_selectedIndustries.isEmpty ||
-        _selectedSkills.length != 5 ||
+        _selectedSkills.length != 3 ||
         _selectedEducation == null ||
         _selectedInterests.isEmpty) {
       _showSnack("Please complete all sections", Colors.orange);
@@ -402,18 +402,18 @@ class _SkillsWorkflowState extends State<SkillsWorkflow> {
             showBack: false,
           ),
           _buildPage(
-            title: 'Top 5 Skills',
+            title: 'Top 3 Skills',
             subtitle:
-                'Select your strongest skills (${_selectedSkills.length}/5)',
+                'Select your strongest skills (${_selectedSkills.length}/3)',
             icon: Icons.verified,
             search: _searchSkill,
             onSearch: (v) => setState(() => _searchSkill = v),
             list: _skills,
             selected: _selectedSkills,
             isLimited: true,
-            maxLimit: 5,
+            maxLimit: 3,
             btnLabel: 'Next: Education',
-            onNext: _selectedSkills.length == 5
+            onNext: _selectedSkills.length == 3
                 ? () => _pageController.nextPage(
                     duration: const Duration(milliseconds: 300),
                     curve: Curves.easeInOut,
